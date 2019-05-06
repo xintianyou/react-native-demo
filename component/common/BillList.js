@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, FlatList } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, FlatList, ActivityIndicator } from 'react-native';
 
-export default class BillList extends Component {
+export default class BillList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -9,7 +9,9 @@ export default class BillList extends Component {
     renderRow(rowData) {
         if (!this.props.data.length) {
             return (
-                <Text>loading...</Text>
+                <View style={[styles.container, styles.horizontal]}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
             )
         } else {
             return (
@@ -50,6 +52,11 @@ const styles = StyleSheet.create({
         flex: 1,
         marginBottom: 15,
         backgroundColor: '#F5F7FA',
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        padding: 10
     },
     item: {
         // flex: 1,

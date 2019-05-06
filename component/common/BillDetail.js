@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
-import { Dimensions, TextInput, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, ScrollView } from 'react-native';
+import { Dimensions, AsyncStorage, TextInput, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, ScrollView, ActivityIndicator } from 'react-native';
 
-export default class BillDetail extends Component {
+export default class BillDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            form: null
+            form: null,
+            userInfo: null
         }
     }
     
     componentDidMount() {
-        this.getBillDetail();
+        let userInfo = AsyncStorage.getItem('userInfo').then((values) => {
+            this.setState({
+                userInfo: JSON.parse(values)
+            })
+            this.getBillDetail();
+        });
     }
     static navigationOptions = ({ navigation }) => {
         const { state } = navigation;
@@ -19,17 +25,19 @@ export default class BillDetail extends Component {
         }
     };
     async getBillDetail() {
+        if (!this.state.userInfo) {
+            alert('请先登录')
+        }
         const { params } = this.props.navigation.state;
         fetch(`https://www.huipiaoxian.com/gateway/bills/billProduct/${params.id}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': '4E01800AD855431EBEC920DF8061F646' //https://www.huipiaoxian.com登录账号后查看localstorage中的Authorization
+                'Authorization': this.state.userInfo.token
             }
         }).then((response) => response.json()).then((responseJson) => {
             if (responseJson) {
-                // Alert.alert(JSON.stringify(responseJson))
                 this.setState({
                     form: responseJson.data
                 })
@@ -42,7 +50,9 @@ export default class BillDetail extends Component {
         let form = this.state.form;
         if (!form) {
             return (
-                <Text>加载中。。。</Text>
+                <View style={[styles.container, styles.horizontal]}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
             )
         } else {
             return (
@@ -85,12 +95,16 @@ let MainWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 10,
+    },
+    horizontal: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
         padding: 10
     },
     item: {
         flex: 1,
         padding: 10,
-        // fontSize: 18,
         height: 203,
         backgroundColor: '#fff',
         marginBottom: 15,

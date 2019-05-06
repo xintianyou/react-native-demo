@@ -3,7 +3,7 @@ import { AppRegistry, StyleSheet, Text, TextInput, View, Button, Alert, FlatList
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 
-export default class MarketPage extends Component {
+export default class MarketPage extends React.Component {
   static navigationOptions = ({navigation}) => {
     let headerRight = (
       <Button title="Info" />
@@ -43,7 +43,9 @@ export default class MarketPage extends Component {
   }
 
   componentDidMount() {
-    this.getBillList()
+    this.props.navigation.addListener('didFocus', () => {
+      this.getBillList();
+    });
   }
 
   fn(id) {

@@ -4,11 +4,14 @@ import { createBottomTabNavigator } from "react-navigation";
 
 import HomePage from '../page/homePage/HomePage';
 import MarketPage from '../page/marketPage/MarketPage';
+import MinePage from '../page/minePage/MinePage';
 
 const MainTabSelectedIcon = require("../assets/images/i_home_foc.png");
 const MainTabUnSelectedIcon = require("../assets/images/i_home.png");
-const LiveTabUnSelectedIcon = require("../assets/images/i_live.png");
 const LiveTabSelectedIcon = require("../assets/images/i_live_foc.png");
+const LiveTabUnSelectedIcon = require("../assets/images/i_live.png");
+const MineTabSelectedIcon = require("../assets/images/i_mine_foc.png");
+const MineTabUnSelectedIcon = require("../assets/images/i_mine.png");
 
 export default BottomNavigator = createBottomTabNavigator({
     HomePage: {
@@ -43,6 +46,24 @@ export default BottomNavigator = createBottomTabNavigator({
         }),
       })
     },
+    MinePage: {
+      screen: MinePage,
+      navigationOptions: ({ navigation, screeProps }) => ({
+        title: '我的交易',
+        headerStyle:styles.navigator,
+        headerTitleStyle:styles.navigatorTitle,
+        tabBarIcon:(({tintColor,focused}) => {
+          return(
+            <Image 
+              source={focused ? MineTabSelectedIcon : MineTabUnSelectedIcon}
+              style={styles.tabbarImage}
+            />
+          )
+        }),
+      })
+    },
+}, {
+  initialRouteName:'HomePage'
 });
 
 const styles = StyleSheet.create({

@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Button, Alert, ScrollView } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Button, Alert, ScrollView } from 'react-native';
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 import BillDetail from '../../component/common/BillDetail';
 
 import Swiper from 'react-native-swiper';
 
-export default class HomePage extends Component {
+export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       texts: '张三',
       age: 20,
-      billList: []
+      billList: [],
+      userInfo: ''
     };
   }
   async getBillList() {
@@ -32,12 +33,22 @@ export default class HomePage extends Component {
   }
 
   componentDidMount() {
-    this.getBillList()
+    this.props.navigation.addListener('didFocus', () => {
+      this.getBillList();
+    });
   }
 
   fn(id) {
-    // Alert.alert(id)
-    this.props.navigation.navigate('BillDetail', {id: id});
+    let userInfo = AsyncStorage.getItem('userInfo').then((values) => {
+      this.setState({
+        userInfo: values
+      })
+      if (!this.state.userInfo) {
+        alert('请先登录')
+        return false
+      }
+      this.props.navigation.navigate('BillDetail', {id: id});
+    });
   }
 
   render() {

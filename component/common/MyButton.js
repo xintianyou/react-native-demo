@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, TextInput, View, Button, Alert, TouchableHighlight } from 'react-native';
 
-export default class MyButton extends Component {
+export default class MyButton extends React.Component {
   static defaultProps = {
     title: '提交'
   }
