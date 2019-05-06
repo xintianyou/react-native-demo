@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet } from 'react-native';
 import { createAppContainer } from "react-navigation";
 import StackNavigator from './app/StackNavigator';
 

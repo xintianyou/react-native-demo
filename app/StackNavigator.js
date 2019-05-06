@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Image, StyleSheet } from 'react-native';
-import { createBottomTabNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 import BottomNavigator from './BottomNavigator';
 
 import BillDetail from '../component/common/BillDetail';
