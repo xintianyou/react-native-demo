@@ -25,7 +25,7 @@ export default class BillDetail extends Component {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'FD9E11FC64424734B9D2A810A5B47530' //https://www.huipiaoxian.com登录账号后查看localstorage中的Authorization
+                'Authorization': '4E01800AD855431EBEC920DF8061F646' //https://www.huipiaoxian.com登录账号后查看localstorage中的Authorization
             }
         }).then((response) => response.json()).then((responseJson) => {
             if (responseJson) {
