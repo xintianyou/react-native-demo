@@ -12,6 +12,7 @@ export default StackNavigator = createStackNavigator({
     screen: BottomNavigator,
     navigationOptions: ({navigation, screenProps}) => ({
       header: null,
+      // headerBackTitle: null
     })
   },
   BillDetail: {

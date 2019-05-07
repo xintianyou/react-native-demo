@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import { Dimensions, AsyncStorage, TextInput, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, ScrollView, ActivityIndicator } from 'react-native';
+import { Dimensions, AsyncStorage, TextInput, StyleSheet, Text, TouchableOpacity, TouchableHighlight, View, Button, Modal, Image, ScrollView, ActivityIndicator, TouchableWithoutFeedback } from 'react-native';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 export default class BillDetail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             form: null,
-            userInfo: null
+            userInfo: null,
+            modalVisible: false
         }
     }
-    
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
     componentDidMount() {
         let userInfo = AsyncStorage.getItem('userInfo').then((values) => {
             this.setState({
@@ -114,9 +118,26 @@ export default class BillDetail extends React.Component {
                                 <Text style={styles.span}>被书次数</Text>
                                 <Text style={styles.span}>{form.bill_endorsement_number}</Text>
                             </View>
-                            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between',paddingLeft: 15,paddingRight: 15, paddingTop: 10, paddingBottom: 10, backgroundColor: '#fff', marginBottom: 5}}>
-                                <Image source={{ uri: form.bill_front_photo_path }} style={styles.billImg}/>
-                                <Image source={{ uri: form.bill_back_photo_path1 }} style={styles.billImg}/>
+                            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingLeft: 15, paddingRight: 15, paddingTop: 10, paddingBottom: 10, backgroundColor: '#fff', marginBottom: 5 }}>
+                                <TouchableOpacity onPress={() => {this.setModalVisible(true)}}>
+                                    <Image source={{ uri: form.bill_front_photo_path }} style={styles.billImg}/>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setModalVisible(true)}}>
+                                    <Image source={{ uri: form.bill_back_photo_path1 }} style={styles.billImg} />
+                                </TouchableOpacity>
+                                <Modal
+                                    animationType={'fade'}
+                                    transparent={false}
+                                    visible={this.state.modalVisible}
+                                    onRequestClose={() => this.setState({modalVisible: false})}
+                                >
+                                    <TouchableWithoutFeedback onPress={()=>this.setState({modalVisible:false})}>
+                                        <ImageViewer
+                                            imageUrls={[{ url: form.bill_front_photo_path }, { url: form.bill_back_photo_path1 }]}
+                                            onClick={()=>this.setState({modalVisible: false})}
+                                        />
+                                    </TouchableWithoutFeedback>
+                                </Modal>
                             </View>
                             <View style={[styles.contentLine, {borderBottomWidth: 0}]}>
                                 <Text style={styles.span}>票据状态</Text>
@@ -159,9 +180,11 @@ export default class BillDetail extends React.Component {
                             
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.buyBtn}>
-                        <Text style={styles.btnText}>我要购买</Text>
-                    </TouchableOpacity>
+                    <ScrollView>
+                        <TouchableHighlight style={styles.buyBtn}>
+                            <Text style={styles.btnText}>我要购买</Text>
+                        </TouchableHighlight>
+                    </ScrollView>
                 </View>
             )
         }
@@ -171,6 +194,7 @@ export default class BillDetail extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView>{this.detail()}</ScrollView>
+                
             </View>
         );
     }
@@ -242,6 +266,7 @@ const styles = StyleSheet.create({
     btnText: {
         color: '#fff',
         fontSize: 20,
-        textAlign: 'center'
+        textAlign: 'center',
+        lineHeight: 54
     }
 })

@@ -48,6 +48,9 @@ export default class MinePage extends React.Component{
                     <Text style={{textAlign:"center"}}>
                         {this.state.userInfo.enterprise_name}
                     </Text>
+                    <Text style={{textAlign:"center"}}>
+                        企业ID:{this.state.userInfo.enterprise_id}
+                    </Text>
                 </View>
             )
         }

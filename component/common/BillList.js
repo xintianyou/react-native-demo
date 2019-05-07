@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, FlatList, ActivityIndicator } from 'react-native';
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, FlatList, ActivityIndicator, AsyncStorage } from 'react-native';
 import moment from 'moment';
 import calc from 'calculatorjs';
 
 export default class BillList extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            userInfo: null
+        }
     }
     
     renderRow(rowData) {
@@ -41,7 +44,7 @@ export default class BillList extends React.Component {
                                 style={styles.buttonText}
                                 onPress={() => this.bidding(rowData.bill_status_code, JSON.stringify(rowData.bill_product_id))}
                             >
-                                {rowData.bill_status_code == 801 ? '我要买' : (rowData.bill_status_code >= 804 && rowData.bill_status_code < 810 ? '交易中' : '交易完成') }
+                                { this.getBtnText(rowData.drawer_id, rowData.bill_status_code) }
                                 </Text>
                         </TouchableOpacity>
                     </View>
@@ -57,9 +60,15 @@ export default class BillList extends React.Component {
         this.props.fn(id)
     }
     componentDidMount() {
-        // Alert.alert(typeof this.props.data)
+        AsyncStorage.getItem('userInfo').then((values) => {
+            this.setState({
+                userInfo: JSON.parse(values)
+            })
+        });
     }
-    
+    getBtnText(drawer_id, status) {
+        return status == 801 ? '我要买' : (status >= 804 && status < 810 ? '交易中' : '交易完成') 
+    }
     render() {
         return (
             <View style={styles.container}>

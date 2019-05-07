@@ -9,6 +9,7 @@ export default class MarketPage extends React.Component {
       <Button title="Info" />
     );
     return {
+      title: '票据商城',
       headerRight: headerRight
     }
   };
@@ -26,7 +27,7 @@ export default class MarketPage extends React.Component {
 
   async getBillList() {
     // Alert.alert('请求数据')
-    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=50', {
+    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=20', {
       //请求方式，GET或POST
       method: 'GET',
       headers: {

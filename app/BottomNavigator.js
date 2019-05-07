@@ -4,12 +4,15 @@ import { createBottomTabNavigator } from "react-navigation";
 
 import HomePage from '../page/homePage/HomePage';
 import MarketPage from '../page/marketPage/MarketPage';
+import PostPage from '../page/postPage/PostPage';
 import MinePage from '../page/minePage/MinePage';
 
 const MainTabSelectedIcon = require("../assets/images/i_home_foc.png");
 const MainTabUnSelectedIcon = require("../assets/images/i_home.png");
 const LiveTabSelectedIcon = require("../assets/images/i_live_foc.png");
 const LiveTabUnSelectedIcon = require("../assets/images/i_live.png");
+const VideoTabSelectedIcon = require("../assets/images/i_video_foc.png");
+const VideoTabUnSelectedIcon = require("../assets/images/i_video.png");
 const MineTabSelectedIcon = require("../assets/images/i_mine_foc.png");
 const MineTabUnSelectedIcon = require("../assets/images/i_mine.png");
 
@@ -40,6 +43,22 @@ export default BottomNavigator = createBottomTabNavigator({
           return(
             <Image 
               source={focused ? LiveTabSelectedIcon : LiveTabUnSelectedIcon}
+              style={styles.tabbarImage}
+            />
+          )
+        }),
+      })
+    },
+    PostPage: {
+      screen: PostPage,
+      navigationOptions: ({ navigation, screeProps }) => ({
+        title: '发布票据',
+        headerStyle:styles.navigator,
+        headerTitleStyle:styles.navigatorTitle,
+        tabBarIcon:(({tintColor,focused}) => {
+          return(
+            <Image 
+              source={focused ? VideoTabSelectedIcon : VideoTabUnSelectedIcon}
               style={styles.tabbarImage}
             />
           )
