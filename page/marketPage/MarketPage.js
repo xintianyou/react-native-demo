@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, Button, Alert, FlatList } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, Button, Alert, FlatList, AsyncStorage } from 'react-native';
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 
@@ -49,10 +49,16 @@ export default class MarketPage extends React.Component {
   }
 
   fn(id) {
-    this._billDetail(id)
-  }
-  _billDetail(id) {
-    Alert.alert(id)
+    let userInfo = AsyncStorage.getItem('userInfo').then((values) => {
+      this.setState({
+        userInfo: values
+      })
+      if (!this.state.userInfo) {
+        alert('请先登录')
+        return false
+      }
+      this.props.navigation.navigate('BillDetail', {id: id});
+    });
   }
   render() {
     return (
