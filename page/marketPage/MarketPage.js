@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, TextInput, View, Button, Alert, FlatList } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, Button, Alert, FlatList } from 'react-native';
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 
@@ -26,7 +26,7 @@ export default class MarketPage extends React.Component {
 
   async getBillList() {
     // Alert.alert('请求数据')
-    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=10', {
+    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=50', {
       //请求方式，GET或POST
       method: 'GET',
       headers: {
@@ -57,14 +57,11 @@ export default class MarketPage extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* <TextInput
-          style={ styles.input }
-          defaultValue={ this.state.texts }
-          placeholder="请输入"
-          onChangeText={(ss) => this.setState({texts: ss})}
-        />
-        <MyButton title="ss" onPressButton={this.onPressButton.bind(this)}/> */}
-        <BillList data={this.state.billList} fn={this.fn.bind(this)}/>
+        <ScrollView>
+          <View style={styles.mainContent}>
+            <BillList data={this.state.billList} fn={this.fn.bind(this)}/>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -73,12 +70,12 @@ export default class MarketPage extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 22
+    backgroundColor: '#F5F7FA',
   },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+  mainContent: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 10
   },
   input: {
     height: 50,

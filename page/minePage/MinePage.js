@@ -72,11 +72,11 @@ export default class MinePage extends React.Component{
                 <TouchableOpacity style={styles.button}>
                     <Button title="设置" onPress={()=>this.props.navigation.navigate('Settings')}></Button>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this._uploadImg}>
+                {/* <TouchableOpacity onPress={this._uploadImg}>
                     <View style={styles.photoImg}>
-                        {/* <Image source={{uri:}}></Image> */}
+                    
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {this._enterpriseName()}
             </View>
         )

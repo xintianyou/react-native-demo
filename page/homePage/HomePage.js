@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AsyncStorage, StyleSheet, Text, View, Button, Alert, ScrollView } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View, Button, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 import BillDetail from '../../component/common/BillDetail';
@@ -66,7 +66,15 @@ export default class HomePage extends React.Component {
               <Text style={styles.text}>And simple</Text>
             </View>
           </Swiper>
-          <BillList data={this.state.billList} fn={this.fn.bind(this)}/>
+          <View style={styles.mainContent}>
+            <View style={styles.blockTitle}>
+              <Text>最新票源</Text>
+              <TouchableOpacity>
+                <Text onPress={() => { this.props.navigation.navigate('MarketPage') }}>查看更多></Text>
+              </TouchableOpacity>
+            </View>
+            <BillList data={this.state.billList} fn={this.fn.bind(this)}/>
+          </View>
         </ScrollView>
       </View>
     );
@@ -75,25 +83,22 @@ export default class HomePage extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#F5F7FA',
   },
-  item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+  mainContent: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingTop: 10
   },
-  input: {
-    height: 50,
-  },
-  button: {
-    height: 50,
-    backgroundColor: '#ffb307'
-  },
-  buttonText: {
-    textAlign: "center",
-    lineHeight: 50,
-    fontSize: 20,
-    color: '#fff'
+  blockTitle: {
+    height: 28,
+    lineHeight: 28,
+    color: '#666',
+    fontSize: 15,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   wrapper: {
     height: 160

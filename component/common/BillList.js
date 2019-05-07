@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View, Button, Alert, Image, FlatList, ActivityIndicator } from 'react-native';
+import moment from 'moment';
+import calc from 'calculatorjs';
 
 export default class BillList extends React.Component {
     constructor(props) {
@@ -15,20 +17,45 @@ export default class BillList extends React.Component {
             )
         } else {
             return (
-                <TouchableOpacity
-                    onPress={()=>this.props.fn(JSON.stringify(rowData.bill_product_id))}
-                >
-                    <View style={styles.item}>
-                        <Text>票面金额: {rowData.bill_sum_price}</Text>
-                        <Text>承兑机构: {rowData.acceptor_name}</Text>
-                        <Text>发布时间: {rowData.bill_product_create_time}</Text>
-                        <Text>到期时间: {rowData.bill_deadline_time_format}</Text>
+                <View style={[styles.item, rowData.bidding_mode == 3210 ? styles.borderBlue : styles.borderYellow]}>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                        <Text style={[styles.biddingMode, rowData.bidding_mode == 3210 ? styles.borderBlueSma : styles.borderYellowSma, rowData.acceptor_type_id != 407 && rowData.acceptor_type_id != 408 ? styles.hide : '']}>
+                            {rowData.acceptor_type_id == 407 ? '财票' : (rowData.acceptor_type_id == 408 ? '商票' : '')}
+                        </Text>
+                        <Text style={[styles.biddingMode, rowData.bidding_mode == 3210 ? styles.borderBlueSma : styles.borderYellowSma]}>
+                            {rowData.bidding_mode == 3210 ? '一口价' : '自由竞价'}
+                        </Text>
                     </View>
-                </TouchableOpacity>
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: "space-between"}}>
+                        <Text style={styles.row}>
+                            <Text>票面金额: </Text>
+                            <Text style={styles.hpxRedTips}>{calc.div(rowData.bill_sum_price, 10000)}万</Text>
+                        </Text>
+                        <Text style={styles.row}>{moment(rowData.bill_product_create_time).format('MM-DD HH:mm')}</Text>
+                    </View>
+                    <Text style={styles.row} numberOfLines={1}>承兑机构: {rowData.acceptor_name}</Text>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: "space-between" }}>
+                        <Text style={styles.row}>到期时间: {rowData.bill_deadline_time_format}</Text>
+                        <TouchableOpacity style={rowData.bill_status_code == 801 ? styles.button : styles.disableButton}>
+                            <Text
+                                style={styles.buttonText}
+                                onPress={() => this.bidding(rowData.bill_status_code, JSON.stringify(rowData.bill_product_id))}
+                            >
+                                {rowData.bill_status_code == 801 ? '我要买' : (rowData.bill_status_code >= 804 && rowData.bill_status_code < 810 ? '交易中' : '交易完成') }
+                                </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
             )
         }
     }
 
+    bidding(status, id) {
+        if (status != 801) {
+            return false
+        }
+        this.props.fn(id)
+    }
     componentDidMount() {
         // Alert.alert(typeof this.props.data)
     }
@@ -49,9 +76,7 @@ let MainHeight = Dimensions.get('window').height;
 let MainWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        marginBottom: 15,
-        backgroundColor: '#F5F7FA',
+        flex: 1
     },
     horizontal: {
         flexDirection: 'row',
@@ -59,13 +84,71 @@ const styles = StyleSheet.create({
         padding: 10
     },
     item: {
-        // flex: 1,
-        width: MainWidth * 0.9,
-        marginLeft: MainWidth * 0.05,
-        padding: 10,
-        height: 120,
+        paddingBottom: 10,
         backgroundColor: '#fff',
         marginBottom: 15,
-        borderRadius: 4
+        borderRadius: 6
     },
+    row: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        height: 28,
+        lineHeight: 28
+    },
+    borderYellow: {
+        borderTopColor: '#ffb307',
+        borderTopWidth: 1
+    },
+    borderBlue: {
+        borderTopColor: '#085AFF',
+        borderTopWidth: 1
+    },
+    biddingMode: {
+        borderWidth: 1,
+        borderTopLeftRadius: 6,
+        borderBottomRightRadius: 6,
+        borderColor: '#ffb307',
+        borderTopWidth: 0,
+        width: 70,
+        paddingLeft: 5,
+        paddingRight: 5,
+        textAlign: 'center',
+        marginRight: 10,
+        marginTop: -1
+    },
+    borderYellowSma: {
+        borderColor: '#ffb307',
+        color: '#ffb307'
+    },
+    borderBlueSma: {
+        borderColor: '#085AFF',
+        color: '#085AFF'
+    },
+    hide: {
+        display: 'none'
+    },
+    hpxRedTips: {
+        color: 'red',
+        fontSize: 18
+    },
+    button: {
+        height: 26,
+        backgroundColor: '#fff',
+        borderColor: 'red',
+        borderWidth: 1,
+        marginRight: 10,
+        marginTop: 2,
+        borderRadius: 4,
+        paddingLeft: 12,
+        paddingRight: 12,
+    },
+    disableButton: {
+        borderWidth: 0,
+        marginRight: 10,
+    },
+    buttonText: {
+        height: 26,
+        lineHeight: 22,
+        color: 'red',
+    }
 })
