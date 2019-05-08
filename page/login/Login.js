@@ -11,8 +11,8 @@ export default class Login extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-            phone: 13611841359,
-            pwd: 123456,
+            phone: '13611841359',
+            pwd: '123456',
             loginEnter: []
         }
     }
@@ -29,16 +29,20 @@ export default class Login extends React.Component{
             })
         }).then((response) => response.json()).then((responseJson) => {
             if (responseJson) {
-                this.setState({
-                    loginEnter: responseJson.data.enterprises
-                })
-                if (responseJson.data.enterprises.length == 1) {
-                    let loginForm = {
-                        username: this.state.phone,
-                        password: this.state.pwd,
-                        enterprise_id: responseJson.data.enterprises[0].enterprise_id
+                if (responseJson.status == 201) {
+                    this.setState({
+                        loginEnter: responseJson.data.enterprises
+                    })
+                    if (responseJson.data.enterprises.length == 1) {
+                        let loginForm = {
+                            username: this.state.phone,
+                            password: this.state.pwd,
+                            enterprise_id: responseJson.data.enterprises[0].enterprise_id
+                        }
+                        this._login(loginForm);
                     }
-                    this._login(loginForm);
+                } else if(responseJson.status == 410) {
+                    alert('密码错误')
                 }
             }
         })
@@ -85,18 +89,20 @@ export default class Login extends React.Component{
     render() {
         return (
             <View style={styles.inputBox}>
-                <View>
-                    <TextInput
-                        style={styles.input}
-                        value={this.state.phone}
-                        placeholder="请输入账号"
-                        onChangeText={(phone)=>this.setState({phone:phone})}
-                    />
-                </View>
+                <TextInput
+                    style={styles.input}
+                    keyboardType={'numeric'}
+                    value={this.state.phone}
+                    placeholder="请输入账号"
+                    maxLength={11}
+                    onChangeText={(phone)=>this.setState({phone:phone})}
+                />
                 <TextInput
                     style={styles.input}
                     value={this.state.pwd}
                     placeholder="请输入密码"
+                    password={true}
+                    secureTextEntry={true}
                     onChangeText={(pwd)=>this.setState({pwd:pwd})}
                 />
                 <TouchableOpacity style={styles.button}>

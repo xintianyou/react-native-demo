@@ -17,7 +17,7 @@ export default class HomePage extends React.Component {
     };
   }
   async getBillList() {
-    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=10', {
+    fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=3', {
       method: 'GET',
       headers: {
           'Accept': 'application/json',

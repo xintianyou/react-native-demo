@@ -55,7 +55,7 @@ export default class BillDetail extends React.Component {
         if (!form) {
             return (
                 <View style={[styles.container, styles.horizontal]}>
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator size="large" color="#666666" />
                 </View>
             )
         } else {

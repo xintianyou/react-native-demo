@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, View, Button, Alert, FlatList, AsyncStorage } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, Button, Alert, FlatList, AsyncStorage, RefreshControl } from 'react-native';
 import MyButton from '../../component/common/MyButton';
 import BillList from '../../component/common/BillList';
 
@@ -18,7 +18,8 @@ export default class MarketPage extends React.Component {
     this.state = {
       texts: '张三',
       age: 20,
-      billList: []
+      billList: [],
+      isRefreshing: false
     };
   }
   onPressButton() {
@@ -26,7 +27,6 @@ export default class MarketPage extends React.Component {
   }
 
   async getBillList() {
-    // Alert.alert('请求数据')
     fetch('https://www.huipiaoxian.com/gateway/bills/billProduct/list?n=20', {
       //请求方式，GET或POST
       method: 'GET',
@@ -37,7 +37,8 @@ export default class MarketPage extends React.Component {
     }).then((response) => response.json()).then((responseJson) => {
       if (responseJson) {
         this.setState({
-          billList: responseJson.data.listName
+          billList: responseJson.data.listName,
+          isRefreshing: false,
         })
       }
     })
@@ -61,10 +62,26 @@ export default class MarketPage extends React.Component {
       this.props.navigation.navigate('BillDetail', {id: id});
     });
   }
+  _onRefresh = () => {
+    this.setState({ isRefreshing: true }, () => {
+      this.getBillList()
+    })
+  }
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.isRefreshing}
+              onRefresh={this._onRefresh}
+              tintColor="#ff0000"
+              title="Loading..."
+              titleColor="#00ff00"
+              colors={['#ff0000', '#00ff00', '#0000ff']}
+              progressBackgroundColor="#ffffff"
+            />
+          }>
           <View style={styles.mainContent}>
             <BillList data={this.state.billList} fn={this.fn.bind(this)}/>
           </View>
