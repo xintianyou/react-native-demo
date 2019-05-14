@@ -64,7 +64,7 @@ export default class BillList extends React.Component {
         return status == 801 ? '我要买' : (status >= 804 && status < 810 ? '交易中' : '交易完成') 
     }
     refershList() {
-        alert('到底了')
+        // alert('到底了')
     }
     onScroll(e) {
         alert(JSON.stringify(e))
