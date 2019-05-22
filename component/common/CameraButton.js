@@ -46,10 +46,10 @@ export default class CameraButton extends React.Component {
   showImagePicker() {
     ImagePicker.showImagePicker(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        // alert('User cancelled image picker');
       }
       else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
+        alert('ImagePicker Error: ', response.error);
       }
       else {
         let source;
